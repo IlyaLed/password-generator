@@ -1,25 +1,26 @@
 pipeline {
-    agent {
-        label 'macos' // Или 'any', если агенты не помечены
-    }
+    agent any
+    
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', // или ваше имя ветки
-                url: 'https://github.com/IlyaLed/password-generator'
-            }
-        }
         stage('Build') {
             steps {
                 sh 'clang++ -std=c++11 -o password_generator password.cpp'
             }
         }
+        
         stage('Test') {
-            script {
+            steps {
                 sh '''
-                ./password_generator <<< "8 1 0" | grep -i "пароль"
+                OUTPUT=$(./password_generator <<< "8 1 0")
+                echo "$OUTPUT" | grep -i "пароль"
                 '''
             }
+        }
+    }
+    
+    post {
+        always {
+            archiveArtifacts artifacts: 'password_generator', fingerprint: true
         }
     }
 }
