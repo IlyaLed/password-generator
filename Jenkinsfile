@@ -15,10 +15,9 @@ pipeline {
             }
         }
         stage('Test') {
-            steps {
+            script {
                 sh '''
-                OUTPUT=$(./password_generator <<< "8 1 0")
-                echo "$OUTPUT" | grep -i "пароль"
+                ./password_generator <<< "8 1 0" | grep -i "пароль"
                 '''
             }
         }
