@@ -3,6 +3,11 @@ pipeline {
         label 'macos' // Или 'any', если агенты не помечены
     }
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', // или ваше имя ветки
+                url: 'https://github.com/IlyaLed/password-generator'
+            }
         stage('Build') {
             steps {
                 sh 'clang++ -std=c++11 -o password_generator password.cpp'
