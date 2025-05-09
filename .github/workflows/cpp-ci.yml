@@ -9,6 +9,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
+    - name: List files (debug)
+      run: ls -la
+    
     - name: Install dependencies
       run: brew install gcc || brew upgrade gcc
       
