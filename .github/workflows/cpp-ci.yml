@@ -16,7 +16,9 @@ jobs:
       run: brew install gcc || brew upgrade gcc
       
     - name: Build
-      run: clang++ -std=c++11 -o password_generator password.cpp
+      run: |
+        clang++ -std=c++11 -o password_generator password.cpp
+        file password_generator
       
     - name: Run tests
       run: |
