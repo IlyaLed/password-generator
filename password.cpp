@@ -2,6 +2,7 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <clocale>
 
 using namespace std;
 
@@ -23,6 +24,8 @@ string generatePassword(int length, bool useDigits, bool useSymbols) {
 }
 
 int main() {
+    setlocale(LC_ALL, "ru_RU.UTF-8");
+    
     int length;
     bool digits, symbols;
 
