@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <clocale>
-
+//проверка CI/CD
 using namespace std;
 
 string generatePassword(int length, bool useDigits, bool useSymbols) {
@@ -29,7 +29,7 @@ int main() {
     int length;
     bool digits, symbols;
 
-    cout << "Длина пароля: ";
+    cout << "Длина пароля: "; 
     cin >> length;
     
     if (length < 6) {
