@@ -1,48 +1,28 @@
-name: C++ CI with Documentation
+name: C++ CI
 
 on: [push, pull_request]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: macos-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
+    
+    - name: List files (debug)
+      run: ls -la
     
     - name: Install dependencies
-      run: |
-        brew update
-        brew install gcc doxygen graphviz
-        
+      run: brew install gcc || brew upgrade gcc
+      
     - name: Build
       run: |
         clang++ -std=c++11 -o password_generator password.cpp
-        ls -la
-        
-    - name: Run basic tests
+        file password_generator
+      
+    - name: Run tests
       run: |
-        OUTPUT=$(./password_generator <<< "8 1 0")
-        echo "$OUTPUT" | grep -q "Ваш пароль: "
-        
-        OUTPUT=$(./password_generator <<< "6 0 1")
-        echo "$OUTPUT" | grep -q "Ваш пароль: "
-        
-        OUTPUT=$(./password_generator <<< "5 1 1")
-        echo "$OUTPUT" | grep -q "Пароль должен быть не короче 6 символов!"
-    
-    - name: Generate documentation
-      run: |
-        doxygen -g Doxyfile 2>/dev/null || true
-        sed -i '' 's/^PROJECT_NAME.*/PROJECT_NAME           = "Password Generator"/' Doxyfile
-        sed -i '' 's/^INPUT.*/INPUT                  = password.cpp/' Doxyfile
-        sed -i '' 's/^RECURSIVE.*/RECURSIVE              = NO/' Doxyfile
-        doxygen Doxyfile
-        mkdir -p public
-        cp -r docs/html/* public/
-        
-    - name: Deploy docs to gh-pages
-      if: github.ref == 'refs/heads/main'
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./public
+        ./password_generator <<< "8 1 0" | grep -q "Ваш пароль: "
+        ./password_generator <<< "6 0 1" | grep -q "Ваш пароль: "
+        ./password_generator <<< "5 1 1" | grep -q "Пароль должен быть не короче 6 символов!"
+
