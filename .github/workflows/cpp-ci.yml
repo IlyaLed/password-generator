@@ -1,27 +1,48 @@
-name: C++ CI
+name: C++ CI with Documentation
 
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: macos-latest
     
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: List files (debug)
-      run: ls -la
+    - uses: actions/checkout@v3
     
     - name: Install dependencies
-      run: brew install gcc || brew upgrade gcc
-      
+      run: |
+        brew update
+        brew install gcc doxygen graphviz
+        
     - name: Build
       run: |
         clang++ -std=c++11 -o password_generator password.cpp
-        file password_generator
-      
-    - name: Run tests
+        ls -la
+        
+    - name: Run basic tests
       run: |
-        ./password_generator <<< "8 1 0" | grep -q "Ваш пароль: "
-        ./password_generator <<< "6 0 1" | grep -q "Ваш пароль: "
-        ./password_generator <<< "5 1 1" | grep -q "Пароль должен быть не короче 6 символов!"
+        OUTPUT=$(./password_generator <<< "8 1 0")
+        echo "$OUTPUT" | grep -q "Ваш пароль: "
+        
+        OUTPUT=$(./password_generator <<< "6 0 1")
+        echo "$OUTPUT" | grep -q "Ваш пароль: "
+        
+        OUTPUT=$(./password_generator <<< "5 1 1")
+        echo "$OUTPUT" | grep -q "Пароль должен быть не короче 6 символов!"
+    
+    - name: Generate documentation
+      run: |
+        doxygen -g Doxyfile 2>/dev/null || true
+        sed -i '' 's/^PROJECT_NAME.*/PROJECT_NAME           = "Password Generator"/' Doxyfile
+        sed -i '' 's/^INPUT.*/INPUT                  = password.cpp/' Doxyfile
+        sed -i '' 's/^RECURSIVE.*/RECURSIVE              = NO/' Doxyfile
+        doxygen Doxyfile
+        mkdir -p public
+        cp -r docs/html/* public/
+        
+    - name: Deploy docs to gh-pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./public
