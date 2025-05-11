@@ -1,3 +1,9 @@
+/**
+ * @file password.cpp
+ * @brief Генератор случайных паролей
+ * @author Леднев Илья Алексеевич
+ * @date 2023
+ */
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -6,6 +12,13 @@
 //проверка CI/CD
 using namespace std;
 
+/**
+ * @brief Генерирует случайный пароль
+ * @param length Длина пароля
+ * @param useDigits Использовать цифры
+ * @param useSymbols Использовать спецсимволы
+ * @return Сгенерированный пароль
+ */
 string generatePassword(int length, bool useDigits, bool useSymbols) {
     const string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const string digits = "0123456789";
@@ -22,6 +35,11 @@ string generatePassword(int length, bool useDigits, bool useSymbols) {
     }
     return password;
 }
+
+/**
+ * @brief Основная функция программы
+ * @return Код завершения (0 - успех, 1 - ошибка)
+ */
 
 int main() {
     setlocale(LC_ALL, "ru_RU.UTF-8");
