@@ -22,4 +22,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ilyaled2/password-generator:latest
+          tags: lednevilya/password-generator:latest
