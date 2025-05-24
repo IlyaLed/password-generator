@@ -5,6 +5,9 @@
 
 using namespace std;
 
+/*ИЗМЕНЕНИЯ*/
+
+
 string generatePassword(int length, bool useDigits, bool useSymbols) {
     const string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const string digits = "0123456789";
