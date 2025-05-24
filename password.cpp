@@ -1,10 +1,30 @@
+/**
+ * @file password.cpp
+ * @brief Генератор случайных паролей
+ * @author Леднев Илья Алексеевич
+ * @date 2023
+ */
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <ctime>
-
+#include <clocale>
+//проверка CI/CD
 using namespace std;
 
+<<<<<<< HEAD
+/**
+ * @brief Генерирует случайный пароль
+ * @param length Длина пароля
+ * @param useDigits Использовать цифры
+ * @param useSymbols Использовать спецсимволы
+ * @return Сгенерированный пароль
+ */
+=======
+/*ИЗМЕНЕНИЯ*/
+
+
+>>>>>>> feature-branch
 string generatePassword(int length, bool useDigits, bool useSymbols) {
     const string letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const string digits = "0123456789";
@@ -22,16 +42,25 @@ string generatePassword(int length, bool useDigits, bool useSymbols) {
     return password;
 }
 
+/**
+ * @brief Основная функция программы
+ * @return Код завершения (0 - успех, 1 - ошибка)
+ */
+
 int main() {
+    setlocale(LC_ALL, "ru_RU.UTF-8");
+    
     int length;
     bool digits, symbols;
 
+    cout << "Длина пароля: "; 
+    cin >> length;
+    
     if (length < 6) {
         cout << "Пароль должен быть не короче 6 символов!" << endl;
         return 1;
     }
-    cout << "Длина пароля: ";
-    cin >> length;
+    
     cout << "Цифры (1/0): ";
     cin >> digits;
     cout << "Спецсимволы (1/0): ";

@@ -1,0 +1,28 @@
+name: C++ CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: List files (debug)
+      run: ls -la
+    
+    - name: Install dependencies
+      run: brew install gcc || brew upgrade gcc
+      
+    - name: Build
+      run: |
+        clang++ -std=c++11 -o password_generator password.cpp
+        file password_generator
+      
+    - name: Run tests
+      run: |
+        ./password_generator <<< "8 1 0" | grep -q "Ваш пароль: "
+        ./password_generator <<< "6 0 1" | grep -q "Ваш пароль: "
+        ./password_generator <<< "5 1 1" | grep -q "Пароль должен быть не короче 6 символов!"
+

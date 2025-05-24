@@ -1,0 +1,36 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write 
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  
+
+    - name: Setup Doxygen
+      run: sudo apt-get install -y doxygen graphviz
+      
+    - name: Generate docs
+      run: |
+        doxygen -g Doxyfile
+        echo 'PROJECT_NAME = "Password Generator"' >> Doxyfile
+        echo 'INPUT = password.cpp' >> Doxyfile
+        echo 'GENERATE_HTML = YES' >> Doxyfile
+        echo 'OUTPUT_DIRECTORY = docs' >> Doxyfile
+        doxygen Doxyfile
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/html
+        keep_files: false  
