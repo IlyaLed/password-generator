@@ -6,4 +6,3 @@
 # Генератор паролей на C++
 
 ![GitHub Actions](https://github.com/ваш-логин/password-generator/actions/workflows/cpp-ci.yml/badge.svg)
-![Jenkins](https://ваш-jenkins-сервер/job/название-джоба/badge/icon)
